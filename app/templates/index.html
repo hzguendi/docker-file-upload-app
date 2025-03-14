@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure File Upload</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Secure File Upload</h1>
+            <div class="user-info">
+                <span>Your IP: {{ client_ip }}</span>
+                {% if ip_info.get('city') %}
+                <span>Location: {{ ip_info.get('city', '') }}, {{ ip_info.get('region', '') }}, {{ ip_info.get('country', '') }}</span>
+                {% endif %}
+            </div>
+        </header>
+
+        <main>
+            <div class="upload-container">
+                <div class="upload-area" id="drop-area">
+                    <form id="upload-form" enctype="multipart/form-data">
+                        <div class="file-input">
+                            <input type="file" id="file-input" name="file" required>
+                            <label for="file-input">
+                                <div class="drag-text">
+                                    <i class="icon-upload"></i>
+                                    <span>Choose a file or drag it here</span>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="file-info" id="file-info"></div>
+                        <button type="submit" class="upload-button">Upload File</button>
+                    </form>
+                </div>
+
+                <div class="upload-status">
+                    <div id="progress-container" class="progress-container">
+                        <div id="progress-bar" class="progress-bar"></div>
+                    </div>
+                    <div id="status-message" class="status-message"></div>
+                </div>
+            </div>
+
+            <div class="info-panels">
+                <div class="info-panel restrictions">
+                    <h2>Upload Restrictions</h2>
+                    <ul>
+                        <li>Maximum file size: <strong>{{ max_size }} MB</strong></li>
+                        {% if blacklist %}
+                        <li>Blocked file types: <strong>{{ blacklist|join(', ') }}</strong></li>
+                        {% endif %}
+                        {% if whitelist %}
+                        <li>Allowed file types: <strong>{{ whitelist|join(', ') }}</strong></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="info-panel disk-status">
+                    <h2>Disk Status</h2>
+                    <div class="disk-meter">
+                        <div class="disk-progress" style="width: {{ disk_info.percent_used }}%"></div>
+                    </div>
+                    <div class="disk-details">
+                        <p>Used: <strong>{{ disk_info.used }}</strong> of <strong>{{ disk_info.total }}</strong> ({{ disk_info.percent_used }}%)</p>
+                        <p>Free space: <strong>{{ disk_info.free }}</strong></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Docker File Upload App</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

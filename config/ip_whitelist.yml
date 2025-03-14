@@ -1,0 +1,10 @@
+# IP whitelist configuration
+# Use '*' for wildcard (e.g., 192.168.1.* matches 192.168.1.1, 192.168.1.2, etc.)
+# Empty list means all IPs are allowed
+
+enabled: false  # Set to true to enable IP whitelist
+
+whitelist:
+  - 127.0.0.1
+  - 192.168.1.*
+  - 10.0.0.*

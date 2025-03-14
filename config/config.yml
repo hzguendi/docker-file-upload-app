@@ -1,0 +1,45 @@
+server:
+  host: 0.0.0.0
+  port: 8000
+  ssl:
+    enabled: true
+    port: 8443
+    cert_path: config/ssl/cert.pem
+    key_path: config/ssl/key.pem
+
+upload:
+  # Max upload size in MB
+  max_size: 100
+  # Upload directory path
+  directory: uploads
+  # Allowed extensions (empty list means all are allowed)
+  whitelist_extensions: []
+  # Blocked extensions
+  blacklist_extensions: ['.exe', '.bat', '.sh', '.php', '.dll', '.bin']
+  # File naming format (variables: {original}, {timestamp}, {uuid}, {user})
+  naming_format: "{timestamp}_{uuid}_{original}"
+
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR
+  file: logs/server.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  rotation: true
+  max_size_mb: 10
+  backup_count: 5
+
+security:
+  # Secret key for token generation
+  secret_key: "CHANGE_THIS_TO_A_RANDOM_STRING_IN_PRODUCTION"
+  # Token expiration in minutes
+  token_expire_minutes: 60
+  # Password file path
+  passwords_file: config/passwords.yml
+  # IP access control file
+  ip_whitelist_file: config/ip_whitelist.yml
+
+rate_limit:
+  enabled: true
+  # Number of uploads per time window
+  max_uploads: 10
+  # Time window in minutes
+  window_minutes: 5
