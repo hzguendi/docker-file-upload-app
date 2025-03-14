@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Welcome, {{ user.username }}!</h2>
+    
+    <div class="dashboard-info">
+        <p>You are logged in as <strong>{{ user.role }}</strong>.</p>
+        <p>Current time: {{ now.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    </div>
+    
+    <div class="dashboard-cards">
+        {% if user.role == 'admin' or user.role == 'writer' %}
+        <div class="dashboard-card">
+            <h3>Upload Files</h3>
+            <p>Upload new files to the server.</p>
+            <div class="card-icon">📤</div>
+            <a href="/upload" class="card-button">Go to Upload</a>
+        </div>
+        {% endif %}
+        
+        {% if user.role == 'admin' or user.role == 'reader' %}
+        <div class="dashboard-card">
+            <h3>Download Files</h3>
+            <p>Browse and download files from the server.</p>
+            <div class="card-icon">📥</div>
+            <a href="/download" class="card-button">Go to Downloads</a>
+        </div>
+        {% endif %}
+        
+        <div class="dashboard-card">
+            <h3>Disk Status</h3>
+            <div class="disk-meter">
+                <div class="disk-progress" style="width: {{ disk_info.percent_used }}%"></div>
+            </div>
+            <div class="disk-details">
+                <p>Used: <strong>{{ disk_info.used }}</strong> of <strong>{{ disk_info.total }}</strong> ({{ disk_info.percent_used }}%)</p>
+                <p>Free space: <strong>{{ disk_info.free }}</strong></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-info api-info">
+        <h3>API Information</h3>
+        <p>For programmatic uploads, use the API endpoint with basic authentication:</p>
+        <pre><code>curl -X POST -u username:password -F "file=@/path/to/yourfile.txt" http://your-server-ip:8000/api/upload</code></pre>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Add current time to the dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+        document.querySelector('.dashboard-info p:nth-child(2)').textContent = 'Current time: ' + dateStr;
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-box">
+        <h2>Login</h2>
+        
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <form method="post" action="/login" class="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <input type="hidden" name="next" value="{{ request.query_params.get('next', '/dashboard') }}">
+            
+            <button type="submit" class="login-button">Login</button>
+        </form>
+        
+        <div class="login-info">
+            <p>Default accounts:</p>
+            <ul>
+                <li>Admin: <code>admin</code> / <code>admin</code></li>
+                <li>Writer: <code>writer</code> / <code>writer</code></li>
+                <li>Reader: <code>reader</code> / <code>reader</code></li>
+            </ul>
+            <p class="warning">Change these in production!</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

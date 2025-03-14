@@ -19,6 +19,18 @@ upload:
   # File naming format (variables: {original}, {timestamp}, {uuid}, {user})
   naming_format: "{timestamp}_{uuid}_{original}"
 
+download:
+  # Enable file download functionality
+  enabled: true
+  # Maximum files to display per page
+  page_size: 20
+  # Enable file previews for images, text, etc.
+  enable_previews: true
+  # Maximum number of lines to show in text file previews
+  text_preview_max_lines: 500
+  # Maximum file size in KB to attempt text preview
+  text_preview_max_size_kb: 1024
+
 logging:
   level: INFO  # DEBUG, INFO, WARNING, ERROR
   file: logs/server.log
@@ -28,14 +40,21 @@ logging:
   backup_count: 5
 
 security:
-  # Secret key for token generation
+  # Secret key for token and session generation
   secret_key: "CHANGE_THIS_TO_A_RANDOM_STRING_IN_PRODUCTION"
-  # Token expiration in minutes
-  token_expire_minutes: 60
-  # Password file path
-  passwords_file: config/passwords.yml
+  # Session expiration in minutes
+  session_expire_minutes: 60
+  # Users configuration file path
+  users_file: config/users.yml
   # IP access control file
   ip_whitelist_file: config/ip_whitelist.yml
+  # CSRF protection
+  enable_csrf: true
+  # Cookie settings
+  cookies:
+    secure: true
+    httponly: true
+    samesite: "lax"
 
 rate_limit:
   enabled: true

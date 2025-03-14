@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="upload-container">
+    <h2>Upload Files</h2>
+    
+    <div class="upload-area" id="drop-area">
+        <form id="upload-form" enctype="multipart/form-data">
+            <div class="file-input">
+                <input type="file" id="file-input" name="file" required>
+                <label for="file-input">
+                    <div class="drag-text">
+                        <i class="icon-upload"></i>
+                        <span>Choose a file or drag it here</span>
+                    </div>
+                </label>
+            </div>
+            <div class="file-info" id="file-info"></div>
+            <button type="submit" class="upload-button">Upload File</button>
+        </form>
+    </div>
+
+    <div class="upload-status">
+        <div id="progress-container" class="progress-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <div id="status-message" class="status-message"></div>
+    </div>
+
+    <div class="info-panels">
+        <div class="info-panel restrictions">
+            <h3>Upload Restrictions</h3>
+            <ul>
+                <li>Maximum file size: <strong>{{ max_size }} MB</strong></li>
+                {% if blacklist %}
+                <li>Blocked file types: <strong>{{ blacklist|join(', ') }}</strong></li>
+                {% endif %}
+                {% if whitelist %}
+                <li>Allowed file types: <strong>{{ whitelist|join(', ') }}</strong></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="info-panel disk-status">
+            <h3>Disk Status</h3>
+            <div class="disk-meter">
+                <div class="disk-progress" style="width: {{ disk_info.percent_used }}%"></div>
+            </div>
+            <div class="disk-details">
+                <p>Used: <strong>{{ disk_info.used }}</strong> of <strong>{{ disk_info.total }}</strong> ({{ disk_info.percent_used }}%)</p>
+                <p>Free space: <strong>{{ disk_info.free }}</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/upload.js"></script>
+{% endblock %}

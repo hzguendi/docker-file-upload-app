@@ -1,0 +1,30 @@
+# User configuration
+# Roles:
+#   - admin: Full access (upload and download)
+#   - writer: Can only upload files
+#   - reader: Can only download files
+#
+# Password hashes are generated using bcrypt
+# Default passwords (CHANGE THESE IN PRODUCTION!):
+#   - admin: "admin"
+#   - writer: "writer"
+#   - reader: "reader"
+
+users:
+  - username: admin
+    password_hash: "$2a$12$A/5mXeMmlI6VKJ8FuAufLObZWPF.ZJalEaTDaYTFo7P9d5ZTsftdi"
+    role: admin
+    email: admin@example.com
+    enabled: true
+    
+  - username: writer
+    password_hash: "$2a$12$Jtd5VtyA6zFx1KmT5etMfuhejx3bRN1fCcSXn8Frh8v6GJdf7YjVG"
+    role: writer
+    email: writer@example.com
+    enabled: true
+    
+  - username: reader
+    password_hash: "$2a$12$gbGYDrKm31FTfI5xKYF8s.dAleFAfwN0mSzuMPwQHOBlegSBF8OM6"
+    role: reader
+    email: reader@example.com
+    enabled: true

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="download-container">
+    <h2>Download Files</h2>
+    
+    {% if files %}
+        <div class="files-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Filename</th>
+                        <th>Size</th>
+                        <th>Modified</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in files %}
+                    <tr>
+                        <td class="file-type">{{ file.icon }}</td>
+                        <td class="file-name">{{ file.name }}</td>
+                        <td class="file-size">{{ file.size_formatted }}</td>
+                        <td class="file-date">{{ file.modified_formatted }}</td>
+                        <td class="file-actions">
+                            <a href="/files/{{ file.name }}" class="download-button" title="Download" download>
+                                <span class="icon">⬇️</span>
+                            </a>
+                            {% if file.previewable %}
+                            <a href="/preview/{{ file.name }}" class="preview-button" title="Preview">
+                                <span class="icon">👁️</span>
+                            </a>
+                            {% endif %}
+                            {% if user.role == 'admin' %}
+                            <a href="#" onclick="confirmDelete('{{ file.name }}'); return false;" class="delete-button" title="Delete">
+                                <span class="icon">🗑️</span>
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if pagination.pages > 1 %}
+        <div class="pagination">
+            <span class="pagination-info">
+                Showing {{ files|length }} of {{ pagination.total }} files (Page {{ pagination.page }} of {{ pagination.pages }})
+            </span>
+            <div class="pagination-links">
+                {% if pagination.page > 1 %}
+                <a href="/download?page=1" class="pagination-link">First</a>
+                <a href="/download?page={{ pagination.page - 1 }}" class="pagination-link">Previous</a>
+                {% endif %}
+                
+                {% for p in range(max(1, pagination.page - 2), min(pagination.pages + 1, pagination.page + 3)) %}
+                <a href="/download?page={{ p }}" class="pagination-link {% if p == pagination.page %}active{% endif %}">
+                    {{ p }}
+                </a>
+                {% endfor %}
+                
+                {% if pagination.page < pagination.pages %}
+                <a href="/download?page={{ pagination.page + 1 }}" class="pagination-link">Next</a>
+                <a href="/download?page={{ pagination.pages }}" class="pagination-link">Last</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    {% else %}
+        <div class="no-files">
+            <p>No files found. Upload some files first!</p>
+            {% if user.role == 'admin' or user.role == 'writer' %}
+            <a href="/upload" class="upload-link">Go to Upload</a>
+            {% endif %}
+        </div>
+    {% endif %}
+    
+    <div class="disk-status">
+        <h3>Disk Status</h3>
+        <div class="disk-meter">
+            <div class="disk-progress" style="width: {{ disk_info.percent_used }}%"></div>
+        </div>
+        <div class="disk-details">
+            <p>Used: <strong>{{ disk_info.used }}</strong> of <strong>{{ disk_info.total }}</strong> ({{ disk_info.percent_used }}%)</p>
+            <p>Free space: <strong>{{ disk_info.free }}</strong></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function confirmDelete(filename) {
+    if (confirm('Are you sure you want to delete ' + filename + '?')) {
+        fetch('/files/' + filename, {
+            method: 'DELETE',
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Failed to delete file');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the file');
+        });
+    }
+}
+</script>
+{% endblock %}

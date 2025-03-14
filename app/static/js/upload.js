@@ -152,9 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         xhr.open('POST', '/upload', true);
         
-        // Set up authentication from browser's authentication dialog
-        xhr.withCredentials = true;
-        
         // Track upload progress
         xhr.upload.addEventListener('progress', function(e) {
             if (e.lengthComputable) {

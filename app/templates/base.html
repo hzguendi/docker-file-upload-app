@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Docker File Upload App</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Docker File Upload App</h1>
+            
+            {% if user %}
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    
+                    {% if user.role == 'admin' or user.role == 'writer' %}
+                    <li><a href="/upload">Upload Files</a></li>
+                    {% endif %}
+                    
+                    {% if user.role == 'admin' or user.role == 'reader' %}
+                    <li><a href="/download">Download Files</a></li>
+                    {% endif %}
+                    
+                    <li class="logout-item">
+                        <a href="/logout" class="logout-button">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+            {% endif %}
+            
+            <div class="user-info">
+                {% if user %}
+                <span>Logged in as <strong>{{ user.username }}</strong> with <strong>{{ user.role }}</strong> role and from IP: {{ client_ip }}
+                {% if ip_info.get('city') %}
+                ({{ ip_info.get('city', '') }}, {{ ip_info.get('region', '') }}, {{ ip_info.get('country', '') }})
+                {% endif %}
+                </span>
+                {% else %}
+                <span>Your IP: {{ client_ip }}
+                {% if ip_info.get('city') %}
+                ({{ ip_info.get('city', '') }}, {{ ip_info.get('region', '') }}, {{ ip_info.get('country', '') }})
+                {% endif %}
+                </span>
+                {% endif %}
+            </div>
+        </header>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            <p>Docker File Upload App v{{ app_version }}</p>
+        </footer>
+    </div>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

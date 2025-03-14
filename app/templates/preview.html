@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<style>
+    .preview-container {
+        padding: 20px;
+    }
+    
+    .preview-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .file-actions {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .file-meta {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: var(--bg-color);
+        border-radius: 5px;
+    }
+    
+    .file-meta p {
+        margin: 5px 0;
+    }
+    
+    .preview-content {
+        padding: 20px;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: var(--shadow);
+        max-height: 70vh;
+        overflow: auto;
+    }
+    
+    .image-preview img {
+        max-width: 100%;
+        max-height: 70vh;
+    }
+    
+    .text-preview {
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    
+    .pdf-preview {
+        width: 100%;
+        height: 70vh;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="preview-container">
+    <div class="preview-header">
+        <h2>File Preview: {{ file.name }}</h2>
+        
+        <div class="file-actions">
+            <a href="/download" class="button secondary">Back to Files</a>
+            <a href="/files/{{ file.name }}" class="button" download>Download</a>
+        </div>
+    </div>
+    
+    <div class="file-meta">
+        <p><strong>Type:</strong> {{ file.type }}</p>
+        <p><strong>Size:</strong> {{ file.size_formatted }}</p>
+        <p><strong>Modified:</strong> {{ file.modified_formatted }}</p>
+        <p><strong>MIME Type:</strong> {{ file.mime_type }}</p>
+    </div>
+    
+    <div class="preview-content">
+        {% if file.type == 'image' %}
+            <div class="image-preview">
+                <img src="/files/{{ file.name }}" alt="{{ file.name }}">
+            </div>
+        {% elif file.mime_type == 'application/pdf' %}
+            <div class="pdf-preview">
+                <embed src="/files/{{ file.name }}" type="application/pdf" width="100%" height="100%">
+            </div>
+        {% elif file.mime_type.startswith('text/') %}
+            <div class="text-preview">
+                {% if truncated %}
+                <div class="truncation-notice">
+                    <p>⚠️ This file is too large to preview completely.</p>
+                </div>
+                {% endif %}
+                <pre>{{ text_content }}</pre>
+            </div>
+        {% else %}
+            <div class="generic-preview">
+                <p>Preview not available for this file type.</p>
+                <p>Please download the file to view its contents.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
