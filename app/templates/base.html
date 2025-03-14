@@ -12,6 +12,14 @@
     <div class="container">
         <header>
             <h1>Docker File Upload App</h1>
+
+            <div class="theme-toggle">
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider round"></span>
+                </label>
+                <span class="theme-label">Dark Mode</span>
+            </div>
             
             {% if user %}
             <nav class="main-nav">
@@ -60,5 +68,7 @@
     </div>
     
     {% block scripts %}{% endblock %}
+    
+    <script src="/static/js/theme.js"></script>
 </body>
 </html>
